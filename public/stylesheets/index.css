@@ -1,0 +1,16 @@
+.box {
+	width: 600px;
+	margin: 50px auto;
+	font-size: 40px;
+}
+form.box {
+	font-size: 14px;
+	text-align: center;
+}
+form.box .item {
+	height: 50px;
+}
+form.box button {
+	width: 100px;
+	height: 30px;
+}
