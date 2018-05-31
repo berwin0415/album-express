@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>
+        <%= title %>
+    </title>
+    <link rel='stylesheet' href='/stylesheets/reset.css' />
+    <link rel='stylesheet' href='/stylesheets/common.css' />
+    <link rel='stylesheet' href='/stylesheets/users.css' />
+</head>
+
+<body>
+	<div class="header">
+		<div class="container">
+		<h1 class="logo fl"><a href="/"><img src="/images/logo.jpg" alt=""></a></h1>
+		<div class="user fr">
+	        <div class="login fl">登陆</div>
+	        <div class="regist fr">注册</div>
+		</div>
+		</div>
+	</div>
+    <% if (type === "regist"){%>
+        <form action="/users/regist" method="post" enctype="multipart/form-data" class="box">
+            <div class="item">
+                <p class="fl">
+                    <label for="username">用户名：</label>
+                </p>
+                <p class="fl">
+                    <input type="text" id="username" name="username">
+                </p>
+                <span class="fr username"></span>
+            </div>
+            <div class="item">
+                <p class="fl">
+                    <label for="password">密码：</label>
+                </p>
+                <p class="fl">
+                    <input type="password" id="password" name="password">
+                </p>
+                <span class="fr password"></span>
+            </div>
+            <div class="item">
+                <p class="fl">
+                    <label for="re_password">再次输入密码：</label>
+                </p>
+                <p class="fl">
+                    <input type="password" id="re_password" name="re_password">
+                </p>
+                <span class="fr re_password"></span>
+            </div>
+            <div class="item">
+                <p class="fl">
+                    <label for="file">头像：</label>
+                </p>
+                <p class="fl">
+                    <input type="file" id="file" name="head_pic">
+                </p>
+            </div>
+            <button id="btn">提交</button>
+        </form>
+        <%}else if (type === "login") {%>
+            <form action="/users/login" method="post" class="box">
+                <div class="item">
+                    <p class="fl">
+                        <label for="username">用户名：</label>
+                    </p>
+                    <p class="fl">
+                        <input type="text" id="username" name="username">
+                    </p>
+                    <span class="fr username"></span>
+                </div>
+                <div class="item">
+                    <p class="fl">
+                        <label for="password">密码：</label>
+                    </p>
+                    <p class="fl">
+                        <input type="password" id="password" name="password">
+                    </p>
+                    <span class="fr password"></span>
+                </div>
+                <button id="btn">提交</button>
+            </form>
+            <%}%>
+    <script src="/javascripts/jquery-1.12.3.min.js"></script>
+    <script src="/javascripts/tools.js"></script>
+    <script src="/javascripts/users/<%= type %>.js"></script>
+</body>
+
+</html>

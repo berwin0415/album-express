@@ -1,3 +1,15 @@
-<h1><%= message %></h1>
-<h2><%= error.status %></h2>
-<pre><%= error.stack %></pre>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<h1><%= message %></h1>
+	<%if(error){%>
+		<% for (var i in error) { %>
+			<p><span><%=i%></span><%=error[i]%></p>
+		<%} %>
+	<%} %>
+</body>
+</html>

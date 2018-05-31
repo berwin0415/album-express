@@ -1,0 +1,16 @@
+{
+  "name"        : "Album",  // 应用名称
+  "script"      : "./bin/www",  // 实际启动脚本
+  "cwd"         : "/home/admin/git/album",  // 当前工作路径
+  "watch": true,
+  "ignore_watch" : [  // 从监控目录中排除
+    "public",
+    "temp",
+    "logs",
+    "javascripts",
+    "stylesheets",
+    "views"
+  ],
+  "error_file" : "/home/admin/git/.pm2/logs/app-err.log",  // 错误日志路径
+  "out_file"   : "/home/admin/git/.pm2/logs/app-out.log",  // 普通日志路径
+}

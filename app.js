@@ -1,13 +1,13 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-var cookieParser = require('cookie-parser');
+// var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var session = require("express-session");
 
 var indexRouter = require('./routes/index');
-// var loginRouter = require('./routes/loginPage');
-// var registRouter = require('./routes/registPage');
 var usersRouter = require('./routes/users');
+var apiRouter = require('./routes/api');
 
 var app = express();
 
@@ -15,20 +15,33 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(logger('dev'));
+app.use(logger('dev')); 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+// app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+// 配置session
+app.use(session({
+   secret: "aihfoihweoifhoiwahfoieahfio",
+   resave: false,
+   saveUninitialized: true
+}));
 
-// app.use('/registPage', registRouter);
-// app.use('/loginPage', indexRouter);
 app.use('/users', usersRouter);
+app.use(function (req, res, next) {
+	var username  = req.session.username;
+	if (username) {
+		next()
+	}else{
+        res.redirect("/users/login");
+	}
+})
+app.use('/api', apiRouter);
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  // next(createError(404));
+  next(createError(404));
 });
 
 // error handler

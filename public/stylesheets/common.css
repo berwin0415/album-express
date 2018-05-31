@@ -15,3 +15,67 @@ a {
 	text-decoration: none;
 	color: #000;
 }
+.container {
+	width: 1000px;
+	margin: 0 auto;
+}
+img {
+	display: block;
+	width: 100%;
+}
+body {
+	background-color: lightblue;
+}
+
+/*header*/
+.header {
+	background-color: rgba(255,255,255, .3);
+	height: 100px;
+	margin-bottom: 50px;
+}
+.header h1 {
+	padding-top: 20px;
+	height: 80px;
+	width: 150px;
+}
+.header h1 a {
+	display: block;
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+	overflow: hidden;
+}
+.header .nav {
+	width: 600px;
+}
+.header .nav li {
+	float: left;
+	padding: 0 20px;
+}
+.header .nav li a {
+	font-size: 20px;
+	line-height: 100px;
+}
+.header .nav li a:active {
+	color: lightyellow;
+}
+.header .user {
+	float: right;
+	width: 250px;
+}
+.header .user .head_pic {
+	padding-top: 20px;
+}
+.header .user  a {
+	line-height: 100px;
+	font-size: 20px;
+	padding: 0 10px;
+}
+.header .user .head_pic a {
+	display: block;
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+	overflow: hidden;
+	padding: 0;
+}

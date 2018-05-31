@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>
+        <%= title %>
+    </title>
+    <link rel='stylesheet' href='/stylesheets/reset.css' />
+    <link rel='stylesheet' href='/stylesheets/common.css' />
+    <link rel='stylesheet' href='/stylesheets/album/<%= type %>.css' />
+</head>
+
+<body>
+    <div class="header">
+        <div class="container clearfix">
+            <h1 class="logo fl"><a href="/"><img src="/images/logo.jpg" alt=""></a></h1>
+            <ul class="nav fl clearfix">
+                <li><a href="/all_album">全部相册</a></li>
+                <li><a href="/my_album">我的相册</a></li>
+                <li><a href="/mng_album">管理相册</a></li>
+            </ul>
+            <div class="user fr">
+                <div class="head_pic fl">
+                    <a href=""><img src="/<%=head_pic%>"   alt=""></a>
+                </div>
+                <div class="username fl">
+                    <a href="#">
+                        <%=username%>
+                    </a>
+                </div>
+                <div class="exit fr">
+                    <a href="/user/exit">退出</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="container">
+            <% if (type && type === "all_album") { %>
+                <div class="all_album">
+                    <% users.forEach(function(value, index){ %>
+                        <div class="album fl">
+                            <div class="cover">
+                                <img src="/images/<%= value.coverImg %>" alt="">
+                            </div>
+                            <div class="name">
+                                <%= value.username %>
+                            </div>
+                        </div>
+                        <% }) %>
+                </div>
+                <% } else if(type && type === "my_album") { %>
+                    <div class="my_album">
+                    </div>
+                    <% } else if(type && type === "mng_album") { %>
+                        <div class="mng_album clearfix">
+                            <div class="top clearfix">
+                                <p class="fl">
+                                    <label for="create">创建相册:</label>
+                                </p>
+                                <p class="fl">
+                                    <input type="text" name="create" id="create_album">
+                                </p>
+                                <p class="fl">
+                                    <button type="button" id="create">创建</button>
+                                </p>
+                                <p class="tips fl"></p>
+                                <p class="edit fr ">edit</p>
+                                <p class="fr confirm"><span>确定</span></p>
+                            </div>
+                            <div class="albums">
+                                <% for(var i = 0;i < albums.length; i++) { %>
+                                    <div class="album fl">
+                                        <div class="cover">
+                                            <img src="/<%= albums[i].cover_img %>" alt="">
+                                        </div>
+                                        <div class="name"><%= albums[i].album%></div>
+                                    </div>
+                                    <% } %>
+                            </div>
+                        </div>
+                        <% } %>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="container">
+        </div>
+    </div>
+    <div class="mask"></div>
+    <div class="sm_window"></div>
+    <script src="/javascripts/jquery-1.12.3.min.js"></script>
+    <script src="/javascripts/tools.js"></script>
+    <script src="/javascripts/index/<%= type %>.js"></script>
+</body>
+
+</html>

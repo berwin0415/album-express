@@ -1,0 +1,45 @@
+.header .user {
+	height: 100px;
+}
+.header .user div {
+	height: 100px;
+	line-height: 100px;
+	cursor: pointer;
+}
+
+/*表单*/
+.box {
+	width: 600px;
+	margin: 50px auto;
+	font-size: 40px;
+}
+form.box {
+	font-size: 14px;
+	text-align: center;
+}
+form.box .item {
+	height: 50px;
+}
+form.box .item .error {
+	outline: 2px solid red;
+	color: red;
+}
+form.box .item span.error {
+	outline: none;
+}
+form.box .item p.error {
+	color: black;
+}
+form.box .item .success {
+	color: lightgreen;
+}
+form.box .item .fl {
+	width: 200px;
+}
+form.box .item .fr {
+	width: 200px;
+}
+form.box button {
+	width: 100px;
+	height: 30px;
+}
