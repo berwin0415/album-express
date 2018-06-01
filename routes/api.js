@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var fs = require("fs");
+var formidable = require("formidable");
 var del = require("../del.js");
 
 var mongodb = require("mongodb");
@@ -39,13 +40,14 @@ router.get('/album', function(req, res, next) {
                     var data = {
                         username: username,
                         album: name,
-                        cover_img: "images/folder.jpg"
+                        cover_img: "images/folder.jpg",
                     }
                     col_data.insertOne(data, function(err) {
                         if (err) {
                             res.json({
                                 error: 3,
-                                msg: "数据库写入失败"
+                                msg: "数据库写入失败",
+                                err: err
                             })
                             client.close();
                             return
@@ -106,14 +108,14 @@ router.get('/album', function(req, res, next) {
     }
 });
 
-router.get("/images", function (req, res)   {
+router.get("/images", function(req, res) {
     var username = req.session.username;
     var name = req.query.name;
     var type = req.query.type;
     // open album
     if (type === "open") {
         // find name album in db
-        MongoClient.connect(mongo_url, {useNewUrlParser: true}, function (err, client) {
+        MongoClient.connect(mongo_url, { useNewUrlParser: true }, function(err, client) {
             if (err) {
                 res.json({
                     error: 2,
@@ -127,18 +129,18 @@ router.get("/images", function (req, res)   {
                 username: username,
                 album: name
             }
-            col_data.find(query).toArray(function (err, result) {
+            col_data.find(query).toArray(function(err, result) {
                 if (err) {
                     res.json({
                         error: 3,
-                        msg:"数据库查询失败",
+                        msg: "数据库查询失败",
                     })
                     client.close();
                     return
                 }
                 client.close();
                 var images = []
-                result.forEach(function (value, index) {
+                result.forEach(function(value, index) {
                     if (value.iamge) {
                         images.push(value.iamge)
                     }
@@ -150,7 +152,129 @@ router.get("/images", function (req, res)   {
             })
         })
 
+    } else if (type === "get_images") {
+        MongoClient.connect(mongo_url, { useNewUrlParser: true }, function(err, client) {
+            if (err) {
+                res.json({
+                    error: 2,
+                    msg: "数据库连接失败"
+                })
+                return
+            }
+            var db = client.db("album");
+            var col_data = db.collection("data");
+            var query = {
+                username: username,
+                album: name
+            }
+            col_data.find(query).toArray(function(err, result) {
+                if (err) {
+                    res.json({
+                        error: 3,
+                        msg: "数据库查询失败",
+                    })
+                    client.close();
+                    return
+                }
+                client.close();
+                var images = []
+                result.forEach(function(value, index) {
+                    if (value.image) {
+                        images.push(value.image)
+                    }
+                })
+                res.json({
+                    error: 0,
+                    images: images
+                })
+            })
+        })
     }
 })
 
+router.post("/upload", function(req, res) {
+    var username = req.session.username;
+    // upload files message array
+    var uploads = [];
+    // define data array for insert 
+    var data = [];
+    var form = new formidable();
+    form.uploadDir = "./public/images"
+    form.on("file", function(fields, file) {
+        uploads.push(file);
+    })
+    form.parse(req, function(err, fields, files) {
+        if (err) {
+            res.json({
+                error: 1,
+                msg: "数据解析失败"
+            })
+            return
+        }
+        var album = fields.name;
+        uploads.forEach(function(value, index) {
+            var oldpath = value.path;
+            var newpath = form.uploadDir + "/" + username + "/" + album + "/" + value.name
+            try {
+                fs.renameSync(oldpath, newpath)
+            } catch (e) {
+                res.json({
+                    error: 3,
+                    msg: err
+                })
+                return;
+            }
+            data.push({
+                username: username,
+                album: album,
+                image: "images/" + username + "/" + album + "/" + value.name
+            })
+        })
+        MongoClient.connect(mongo_url, { useNewUrlParser: true }, function(err, client) {
+            if (err) {
+                res.json({
+                    error: 2,
+                    msg: "数据库连接失败"
+                })
+                return
+            }
+            var db = client.db("album");
+            var col_data = db.collection("data");
+            col_data.find({ username: username, album: album }, { image: 1 }).toArray(function(err, result) {
+                if (err) {
+                    res.json({
+                        error: 2,
+                        msg: "数据库查询失败"
+                    })
+                    client.close();
+                    return
+                }
+                result.forEach(function(value, index) {
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i].image === value.image) {
+                            data.splice(i, 1);
+                            i--;
+                        }
+                    }
+                })
+                col_data.insertMany(data, function(err, result) {
+                    if (err) {
+                        res.json({
+                            error: 4,
+                            msg: "数据库写入失败"
+                        })
+                        client.close();
+                        return;
+                    }
+                    client.close();
+                    res.json({
+                        error: 0
+                    })
+                })
+
+            })
+
+        })
+    })
+})
 module.exports = router;

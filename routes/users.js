@@ -185,6 +185,12 @@ router.route("/login")
         })
     })
 
+router.route("/exit")
+.get(function(req, res){
+    req.session.username = null;
+    res.redirect("/");
+})
+
 router.get("/checkname", function(req, res) {
     var username = req.query.username;
     var type = req.query.type;
